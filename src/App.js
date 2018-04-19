@@ -1,21 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { createStore,connect, compose } from 'rees'
+import counter from './counter.state'
 
-class App extends Component {
-  render() {
+let store = createStore({},{counter});
+//ui Counter
+let Counter = ({value,handleIncrease,add}) => {
+  return (
+    <div>
+      <button onClick={handleIncrease}> counter + </button>
+      <button onClick={add}>counter-</button>
+      <span> {value} </span>
+    </div>
+  )
+}
+
+// here,counter is a proxy object,increase is a function,so we must use:
+// handleIncrease:(e)=>store.counter.increase()
+// not handleIncrease:(e)=>store.counter.increase
+ Counter= compose(
+  store.provider,
+  connect((props)=>({
+    value:store.state.counter,
+    handleIncrease:(e)=>store.counter.increase(),
+    add:(e)=>{store.counter.add(-1)}
+  }))
+)(Counter)
+function App(){
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+        <div>
+            <Counter/>
+        </div>
+    )
+
 }
 
 export default App;
+        
+

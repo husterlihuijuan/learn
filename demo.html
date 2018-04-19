@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>  
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>  
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+<script type="text/babel">
+    class App extends Component{
+        state={
+            comments:["hello","world","react"]
+        }
+        render(){
+            return(
+                <div>
+                {
+                    this.state.comments.map(function(text,index){
+                    return(
+                        <Comment key={index} index={index}>{text}</Comment>
+                    );
+
+                    })
+                }
+                </div>
+            );
+        }
+    }
+    class Comment extends Component{
+        state={
+           // text:this.props.text,
+            editing:false
+        }
+        editePage=()=>{
+            return(
+                <div>
+                    <div>{this.props.children}</div>
+                    <button onClick={this.handleEdit}>edit</button>
+                    <button>remove</button>
+                </div>
+            );
+        }
+        handleEdit=()=>{
+            this.setState({
+                editing:!this.state.editing
+            })
+        }
+        handleSave=()=>{
+            var val=this.refs.newText.value;
+            console.log(val);
+            this.setState({
+                editing:!this.state.editing
+            })
+        }
+
+        savePage=()=>{
+            return(
+                <div>
+                    <textarea ref="newText" defaultValue={this.props.children}></textarea>
+                    <button onClick={this.handleSave}>save</button>
+                </div>
+            );
+        }
+        render(){
+            if(this.state.editing){
+                return this.savePage();
+            }else{
+                
+                return this.editePage();
+            }
+        }
+
+
+    }
+
+ReactDOM.render(
+    <App/>,
+    document.getElementById("root")
+);
+</script>
+</body>
+</html>
